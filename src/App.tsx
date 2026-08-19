@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CurrencyCode, AgencySettings, PricingTier } from './types';
+import { CurrencyCode, AgencySettings, PricingTier, ProofOfWorkProject } from './types';
 import { 
   DEFAULT_AGENCY_SETTINGS, 
   PRICING_TIERS, 
@@ -7,6 +7,8 @@ import {
 } from './data/pricingData';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
+import { ProofOfWorkSection } from './components/ProofOfWorkSection';
+import { ProjectShowcaseModal } from './components/ProjectShowcaseModal';
 import { PricingGrid } from './components/PricingGrid';
 import { PayAsYouBuildSection } from './components/PayAsYouBuildSection';
 import { AddOnsSection } from './components/AddOnsSection';
@@ -47,6 +49,7 @@ export default function App() {
   const [isProposalModalOpen, setIsProposalModalOpen] = useState<boolean>(false);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState<boolean>(false);
   const [previewTier, setPreviewTier] = useState<PricingTier | null>(null);
+  const [showcaseProject, setShowcaseProject] = useState<ProofOfWorkProject | null>(null);
 
   // Sync theme to document.documentElement, body, and localStorage
   useEffect(() => {
@@ -210,7 +213,16 @@ export default function App() {
           onDirectEmail={handleDirectEmail}
         />
 
-        {/* 2. All 6 Pricing Packages Grid */}
+        {/* 2. Proof of Work (Tailory, Memory, Margin) */}
+        <ProofOfWorkSection
+          activeCurrency={activeCurrency}
+          agencySettings={agencySettings}
+          onOpenProjectModal={(project) => setShowcaseProject(project)}
+          onSelectTierById={handleSelectTierById}
+          onDirectWhatsApp={handleDirectWhatsAppMessage}
+        />
+
+        {/* 3. All 6 Pricing Packages Grid */}
         <PricingGrid
           tiers={PRICING_TIERS}
           activeCurrency={activeCurrency}
@@ -222,7 +234,7 @@ export default function App() {
           onOpenComparison={() => setIsComparisonModalOpen(true)}
         />
 
-        {/* 3. The Highlight: Pay-As-You-Build Interactive Section */}
+        {/* 4. The Highlight: Pay-As-You-Build Interactive Section */}
         <PayAsYouBuildSection
           activeCurrency={activeCurrency}
           agencySettings={agencySettings}
@@ -230,7 +242,7 @@ export default function App() {
           onDirectWhatsAppMessage={handleDirectWhatsAppMessage}
         />
 
-        {/* 4. Optional Add-ons & Hosting Services */}
+        {/* 5. Optional Add-ons & Hosting Services */}
         <AddOnsSection
           activeCurrency={activeCurrency}
           selectedAddonIds={selectedAddonIds}
@@ -238,10 +250,10 @@ export default function App() {
           onOpenCustomQuote={() => setIsProposalModalOpen(true)}
         />
 
-        {/* 5. FAQs */}
+        {/* 6. FAQs */}
         <FaqSection />
 
-        {/* 6. Bottom Tailored CTA */}
+        {/* 7. Bottom Tailored CTA */}
         <BottomCtaSection
           agencySettings={agencySettings}
           onOpenProposalModal={() => setIsProposalModalOpen(true)}
@@ -267,6 +279,15 @@ export default function App() {
       />
 
       {/* Modals & Drawers */}
+      <ProjectShowcaseModal
+        isOpen={!!showcaseProject}
+        onClose={() => setShowcaseProject(null)}
+        project={showcaseProject}
+        activeCurrency={activeCurrency}
+        onSelectProjectTier={handleSelectTierById}
+        onDirectWhatsApp={handleDirectWhatsAppMessage}
+      />
+
       <InteractiveProposalModal
         isOpen={isProposalModalOpen}
         onClose={() => setIsProposalModalOpen(false)}

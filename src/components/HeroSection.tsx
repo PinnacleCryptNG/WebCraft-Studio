@@ -56,12 +56,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-sm backdrop-blur-md mb-6"
+          className="inline-flex flex-wrap items-center justify-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 shadow-sm backdrop-blur-md mb-6"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-          <span className="font-semibold text-slate-900 dark:text-white">Transparent Pricing for SMBs</span>
+          <span className="font-semibold text-slate-900 dark:text-white">Recent Deployments Live</span>
           <span className="text-slate-300 dark:text-slate-600">•</span>
-          <span className="text-cyan-700 dark:text-cyan-400 font-semibold">Zero Hidden Charges</span>
+          <button
+            onClick={() => onScrollToSection('proof-of-work')}
+            className="text-indigo-600 dark:text-cyan-400 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Tailory, Memory & Margin (Proof of Work)</span>
+          </button>
         </motion.div>
 
         {/* Main Headline */}

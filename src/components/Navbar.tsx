@@ -79,7 +79,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 text-sm font-medium text-slate-600 dark:text-slate-300">
+            <button 
+              onClick={() => handleNavClick('proof-of-work')}
+              className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-white font-semibold transition-colors cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Proof of Work</span>
+            </button>
             <button 
               onClick={() => handleNavClick('pricing-plans')}
               className="hover:text-indigo-600 dark:hover:text-white transition-colors cursor-pointer"
@@ -291,6 +298,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Nav links */}
             <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleNavClick('proof-of-work')}
+                className="col-span-2 flex items-center justify-between p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-800/80 text-xs font-bold text-left"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />
+                  <span>Proof of Work (Tailory, Memory, Margin)</span>
+                </div>
+                <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-indigo-200/60 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">New</span>
+              </button>
+
               <button
                 onClick={() => handleNavClick('pricing-plans')}
                 className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/60 dark:border-slate-800 text-xs font-semibold text-left"

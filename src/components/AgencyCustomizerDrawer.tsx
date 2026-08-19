@@ -168,6 +168,46 @@ export const AgencyCustomizerDrawer: React.FC<AgencyCustomizerDrawerProps> = ({
               </p>
             </div>
 
+            {/* Proof of Work Live URLs */}
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+              <span className="block text-xs font-mono font-bold text-slate-800 dark:text-slate-200 uppercase">
+                Proof of Work Live URLs (Optional)
+              </span>
+              
+              <div>
+                <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-0.5">Tailory Live Link:</label>
+                <input
+                  type="url"
+                  value={formState.tailoryUrl || ''}
+                  onChange={(e) => setFormState({ ...formState, tailoryUrl: e.target.value })}
+                  placeholder="e.g. https://tailory.app or vercel url"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-0.5">Memory Live Link:</label>
+                <input
+                  type="url"
+                  value={formState.memoryUrl || ''}
+                  onChange={(e) => setFormState({ ...formState, memoryUrl: e.target.value })}
+                  placeholder="e.g. https://memory-vault.app"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-0.5">Margin Live Link:</label>
+                <input
+                  type="url"
+                  value={formState.marginUrl || ''}
+                  onChange={(e) => setFormState({ ...formState, marginUrl: e.target.value })}
+                  placeholder="e.g. https://margin-calc.app"
+                  className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-900 dark:text-white"
+                />
+              </div>
+            </div>
+
             {/* Reusability Information Box */}
             <div className="p-3.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-500/20 text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
               <div className="flex items-center gap-1.5 font-bold text-indigo-700 dark:text-cyan-300">

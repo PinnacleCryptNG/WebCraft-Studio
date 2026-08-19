@@ -1,4 +1,4 @@
-import { PricingTier, AddOnService, PayStage, AgencySettings } from '../types';
+import { PricingTier, AddOnService, PayStage, AgencySettings, ProofOfWorkProject } from '../types';
 
 export const DEFAULT_AGENCY_SETTINGS: AgencySettings = {
   agencyName: "WebCraft Studio",
@@ -8,8 +8,122 @@ export const DEFAULT_AGENCY_SETTINGS: AgencySettings = {
   defaultCurrency: 'NGN',
   customDiscountPercent: 5,
   consultationLink: "https://wa.me/2348166818076",
-  portfolioUrl: "#portfolio",
+  portfolioUrl: "#proof-of-work",
+  tailoryUrl: "https://tailory.app",
+  memoryUrl: "https://memory-vault.app",
+  marginUrl: "https://margin-calc.app",
 };
+
+export const PROOF_OF_WORK_PROJECTS: ProofOfWorkProject[] = [
+  {
+    id: 'tailory',
+    title: 'Tailory',
+    tagline: 'Custom fitting form & instant WhatsApp orders for bespoke fashion designers.',
+    category: 'Fashion & E-Commerce',
+    targetAudience: 'Fashion Designers, Bespoke Tailors & Boutiques',
+    badge: 'LIVE PRODUCT • BESPOKE FASHION',
+    description: 'Turns Instagram DM chats into clean, paid orders. Clients choose fabrics, submit custom body measurements online, and send ready-to-sew orders straight to your WhatsApp.',
+    packageTierId: 'business-plus',
+    packageTierName: 'Business Plus Package',
+    estimatedPriceNGN: 75000,
+    deliveryTime: '3 Days Delivery',
+    liveUrl: 'https://tailory.app',
+    features: [
+      'Interactive Custom Measurement Form with visual fit guide',
+      'Fabric & Style Lookbook with high-resolution photo cards',
+      '1-Tap Direct WhatsApp checkout with pre-filled garment specs',
+      'Ultra-fast on mobile phones and Instagram bio links',
+      'Customer reviews and trust badges to boost sales'
+    ],
+    metrics: [
+      { label: 'Mobile Speed', value: 'Instant' },
+      { label: 'Turnaround', value: '48 Hours' },
+      { label: 'Inquiries', value: '+240%' },
+      { label: 'Checkout Rate', value: '42%' }
+    ],
+    highlights: ['Custom Measurement Form', 'Fabric Lookbook', '1-Tap WhatsApp Orders', 'Mobile-First Design'],
+    clientQuote: {
+      feedback: '"Tailory made our tailoring brand look like a high-end fashion house. Clients submit measurements directly online with zero back-and-forth!"',
+      clientName: 'Adewale S.',
+      role: 'Creative Director, Bespoke Atelier'
+    },
+    accentColor: 'text-amber-400',
+    gradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
+    mockupType: 'tailory'
+  },
+  {
+    id: 'memory',
+    title: 'Memory',
+    tagline: 'A cinematic digital keepsake & story timeline for cherished moments.',
+    category: 'Interactive Keepsake',
+    targetAudience: 'Couples, Events, Memorials & Storytellers',
+    badge: 'LIVE PRODUCT • INTERACTIVE JOURNAL',
+    description: 'Bring special moments to life. An interactive digital archive with photo galleries, audio voice notes, and milestone timelines made for weddings, heritage archives, and anniversaries.',
+    packageTierId: 'business-basic',
+    packageTierName: 'Business Basic Package',
+    estimatedPriceNGN: 50000,
+    deliveryTime: '2 Days Delivery',
+    liveUrl: 'https://memory-vault.app',
+    features: [
+      'Interactive milestone timeline with smooth story navigation',
+      'Fast photo gallery with full-screen lightbox viewing',
+      'Built-in audio voice notes and background sound playback',
+      'Smart category tags to find memories in seconds',
+      'Sleek Dark and Light ambient modes for comfortable reading'
+    ],
+    metrics: [
+      { label: 'Load Speed', value: '0.6s' },
+      { label: 'Design Feel', value: 'Cinematic' },
+      { label: 'Mobile-Ready', value: '100%' },
+      { label: 'Client Rating', value: '5.0 ★' }
+    ],
+    highlights: ['Interactive Timeline', 'Photo Gallery', 'Audio Voice Notes', 'Ambient Dark/Light Mode'],
+    clientQuote: {
+      feedback: '"Memory delivers the most emotional and beautiful experience we could ask for. It loads instantly and everyone in our family loves it."',
+      clientName: 'Tunde & Kimberly',
+      role: 'Founders, Heritage Media'
+    },
+    accentColor: 'text-indigo-400',
+    gradient: 'from-indigo-600/20 via-purple-500/10 to-transparent',
+    mockupType: 'memory'
+  },
+  {
+    id: 'margin',
+    title: 'Margin',
+    tagline: 'Instant profit & ROI calculator for smart online merchants.',
+    category: 'Merchant & FinTech Tool',
+    targetAudience: 'E-Commerce Sellers, Vendors & SMB Operators',
+    badge: 'LIVE PRODUCT • PROFIT TOOL',
+    description: 'Never lose money on a sale again. Enter your product cost, shipping, and ad spend to instantly see your true gross margins, net profit, and break-even sales in seconds.',
+    packageTierId: 'professional',
+    packageTierName: 'Professional Package',
+    estimatedPriceNGN: 100000,
+    deliveryTime: '4 Days Delivery',
+    liveUrl: 'https://margin-calc.app',
+    features: [
+      'Instant profit, gross margin, and net margin calculation',
+      'Live visual comparison of product costs vs. take-home profit',
+      'Multi-currency toggle with instant conversion (₦, $, £)',
+      '1-Click PDF & summary download for bookkeeping',
+      'Ad spend (ROAS) and break-even point simulator'
+    ],
+    metrics: [
+      { label: 'Calc Speed', value: 'Instant' },
+      { label: 'Data Accuracy', value: '100%' },
+      { label: 'Active Users', value: '1,200+' },
+      { label: 'Profit Clarity', value: '+35%' }
+    ],
+    highlights: ['Live Profit Calculator', 'ROAS & Ad Simulator', 'Multi-Currency (₦/$/£)', '1-Click PDF Reports'],
+    clientQuote: {
+      feedback: '"Margin completely replaced our clumsy Excel sheets. It gives us instant clarity on our profit margins in seconds."',
+      clientName: 'Chidi O.',
+      role: 'Lead Strategist, CommerceGrowth'
+    },
+    accentColor: 'text-emerald-400',
+    gradient: 'from-emerald-500/20 via-teal-500/10 to-transparent',
+    mockupType: 'margin'
+  }
+];
 
 export const CURRENCY_RATES = {
   NGN: { symbol: '₦', rate: 1, format: (n: number) => `₦${n.toLocaleString()}` },

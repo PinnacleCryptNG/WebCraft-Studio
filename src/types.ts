@@ -50,6 +50,35 @@ export interface PayStage {
   visualTag: string;
 }
 
+export interface ProofOfWorkProject {
+  id: string;
+  title: string;
+  tagline: string;
+  category: 'Fashion & E-Commerce' | 'Interactive Keepsake' | 'Merchant & FinTech Tool' | 'Business';
+  targetAudience: string;
+  description: string;
+  packageTierId: string;
+  packageTierName: string;
+  estimatedPriceNGN: number;
+  deliveryTime: string;
+  liveUrl?: string;
+  features: string[];
+  metrics: {
+    label: string;
+    value: string;
+  }[];
+  highlights: string[];
+  clientQuote?: {
+    feedback: string;
+    clientName: string;
+    role: string;
+  };
+  accentColor: string;
+  gradient: string;
+  badge: string;
+  mockupType: 'tailory' | 'memory' | 'margin';
+}
+
 export interface AgencySettings {
   agencyName: string;
   tagline: string;
@@ -59,6 +88,9 @@ export interface AgencySettings {
   customDiscountPercent: number;
   consultationLink?: string;
   portfolioUrl?: string;
+  tailoryUrl?: string;
+  memoryUrl?: string;
+  marginUrl?: string;
 }
 
 export interface ClientQuote {
