@@ -1,0 +1,6 @@
+{
+  "name": "WebCraft SMB Rate Card",
+  "description": "Premium animated web design rate card, milestone journey simulator, and custom proposal builder for small and medium businesses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
