@@ -333,9 +333,8 @@ export const PayAsYouBuildSection: React.FC<PayAsYouBuildProps> = ({
 
         {/* Upgrade Journey Calculator Widget */}
         <div className="bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-indigo-500/30 shadow-xl">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            
-            <div className="max-w-md">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-800/80">
+            <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold mb-2">
                 <Calculator className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                 UPGRADE DIFFERENTIAL SIMULATOR
@@ -348,14 +347,25 @@ export const PayAsYouBuildSection: React.FC<PayAsYouBuildProps> = ({
               </p>
             </div>
 
-            {/* Selectors and Result */}
-            <div className="w-full lg:w-auto flex-1 flex flex-col sm:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-950/70 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-              
-              {/* Start Stage Dropdown */}
-              <div className="w-full sm:w-1/3">
-                <label className="block text-[11px] uppercase font-mono font-semibold text-slate-500 dark:text-slate-400 mb-1">
-                  Start Stage Today:
-                </label>
+            {/* Discuss Roadmap Button */}
+            <button
+              onClick={handleStartInquiry}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 whitespace-nowrap self-start lg:self-center"
+            >
+              <MessageSquare className="w-4 h-4 shrink-0" />
+              <span>Discuss This Roadmap</span>
+            </button>
+          </div>
+
+          {/* Interactive Calculator Controls Grid */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-slate-50 dark:bg-slate-950/80 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+            
+            {/* Start Stage Dropdown */}
+            <div className="md:col-span-4">
+              <label className="block text-[11px] uppercase font-mono font-bold text-slate-500 dark:text-slate-400 mb-1.5">
+                Start Stage Today:
+              </label>
+              <div className="relative">
                 <select
                   value={startStageIdx}
                   onChange={(e) => {
@@ -363,61 +373,56 @@ export const PayAsYouBuildSection: React.FC<PayAsYouBuildProps> = ({
                     setStartStageIdx(newStart);
                     if (targetStageIdx < newStart) setTargetStageIdx(newStart);
                   }}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 text-xs font-semibold focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer shadow-xs"
                 >
                   {PAY_AS_YOU_BUILD_STAGES.map((s, idx) => (
                     <option key={s.id} value={idx}>
-                      {s.name} ({currencyHelper.format(s.priceNGN)})
+                      Stage 0{s.step}: {s.name} ({currencyHelper.format(s.priceNGN)})
                     </option>
                   ))}
                 </select>
               </div>
+            </div>
 
-              <div className="text-slate-400 font-bold hidden sm:block">
-                <ArrowRight className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+            {/* Arrow separator */}
+            <div className="hidden md:flex md:col-span-1 items-center justify-center pt-5">
+              <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                <ArrowRight className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               </div>
+            </div>
 
-              {/* Target Stage Dropdown */}
-              <div className="w-full sm:w-1/3">
-                <label className="block text-[11px] uppercase font-mono font-semibold text-slate-500 dark:text-slate-400 mb-1">
-                  Target Future Stage:
-                </label>
+            {/* Target Stage Dropdown */}
+            <div className="md:col-span-4">
+              <label className="block text-[11px] uppercase font-mono font-bold text-slate-500 dark:text-slate-400 mb-1.5">
+                Target Future Stage:
+              </label>
+              <div className="relative">
                 <select
                   value={targetStageIdx}
                   onChange={(e) => setTargetStageIdx(Number(e.target.value))}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 text-xs font-semibold focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer shadow-xs"
                 >
                   {PAY_AS_YOU_BUILD_STAGES.map((s, idx) => (
                     <option key={s.id} value={idx} disabled={idx < startStageIdx}>
-                      {s.name} ({currencyHelper.format(s.priceNGN)})
+                      Stage 0{s.step}: {s.name} ({currencyHelper.format(s.priceNGN)})
                     </option>
                   ))}
                 </select>
               </div>
-
-              {/* Calculated Output */}
-              <div className="w-full sm:w-1/3 text-center sm:text-right border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-800 pt-3 sm:pt-0 sm:pl-4">
-                <span className="text-[11px] uppercase font-mono font-semibold text-slate-500 dark:text-slate-400 block">
-                  Future Upgrade Cost:
-                </span>
-                <div className="text-xl sm:text-2xl font-display font-black text-cyan-700 dark:text-cyan-300">
-                  +{currencyHelper.format(upgradeDifference)}
-                </div>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                  {startStageIdx === targetStageIdx ? 'Current Selected Stage' : 'Pay only the exact gap!'}
-                </span>
-              </div>
-
             </div>
 
-            {/* Direct Consult Button */}
-            <button
-              onClick={handleStartInquiry}
-              className="w-full lg:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Discuss This Roadmap</span>
-            </button>
+            {/* Calculated Upgrade Difference Output */}
+            <div className="md:col-span-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center md:text-right">
+              <span className="text-[10px] uppercase font-mono font-bold text-slate-500 dark:text-slate-400 block">
+                Future Upgrade Cost:
+              </span>
+              <div className="text-xl sm:text-2xl font-display font-black text-cyan-700 dark:text-cyan-400 my-0.5">
+                +{currencyHelper.format(upgradeDifference)}
+              </div>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block">
+                {startStageIdx === targetStageIdx ? 'Current base stage' : 'Pay only the exact gap!'}
+              </span>
+            </div>
 
           </div>
         </div>

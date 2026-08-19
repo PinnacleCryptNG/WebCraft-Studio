@@ -164,7 +164,9 @@ export const LiveWebsitePreviewModal: React.FC<LiveWebsitePreviewModalProps> = (
                 <span className="text-[11px] font-mono font-bold uppercase text-slate-500 dark:text-slate-400">
                   Featured Capabilities
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                <div className={`grid gap-3 mt-2 ${
+                  deviceMode === 'desktop' ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1'
+                }`}>
                   <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
                     <div className="w-6 h-6 rounded bg-indigo-50 dark:bg-cyan-500/20 text-indigo-700 dark:text-cyan-400 font-bold flex items-center justify-center text-xs mb-2">01</div>
                     <h5 className="font-bold text-xs text-slate-900 dark:text-white">Core Offerings</h5>

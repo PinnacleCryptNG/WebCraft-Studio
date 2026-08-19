@@ -58,6 +58,11 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <a href="#proof-of-work" className="text-indigo-600 dark:text-cyan-400 font-semibold hover:text-indigo-700 dark:hover:text-white transition-colors">
+                  ✦ Proof of Work (Recent Builds)
+                </a>
+              </li>
+              <li>
                 <a href="#pricing-plans" className="hover:text-indigo-600 dark:hover:text-white transition-colors">
                   All 6 Pricing Tiers (₦35K–₦150K)
                 </a>

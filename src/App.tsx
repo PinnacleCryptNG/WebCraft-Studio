@@ -176,11 +176,13 @@ export default function App() {
     window.location.href = `mailto:${agencySettings.email}?subject=${encodeURIComponent('Inquiry: Business Website Project')}`;
   };
 
-  // Smooth scroll helper
+  // Smooth scroll helper with header offset
   const handleScrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = -76;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 

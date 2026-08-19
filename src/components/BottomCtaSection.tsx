@@ -79,29 +79,31 @@ export const BottomCtaSection: React.FC<BottomCtaSectionProps> = ({
           </div>
 
           {/* Action buttons */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-10 flex flex-col md:flex-row items-stretch md:items-center justify-center gap-3 sm:gap-4 max-w-4xl mx-auto">
             <button
               onClick={onOpenProposalModal}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-600/25 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap min-h-[52px]"
             >
               <span>Start Your Project</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
 
             <button
               onClick={handleCustomConsult}
-              className="w-full sm:w-auto px-7 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm sm:text-base transition-all shadow-md shadow-emerald-600/20 cursor-pointer flex items-center justify-center gap-2"
+              className="flex-1 px-5 py-3.5 sm:py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm sm:text-base transition-all shadow-md shadow-emerald-600/20 cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap min-h-[52px]"
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp Us (+234 816 681 8076)</span>
+              <MessageSquare className="w-4 h-4 shrink-0" />
+              <span>WhatsApp Us</span>
+              <span className="hidden xl:inline text-xs font-mono opacity-90 font-normal">(+234 816 681 8076)</span>
             </button>
 
             <button
               onClick={handleEmailClick}
-              className="w-full sm:w-auto px-6 py-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold text-sm sm:text-base transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="flex-1 px-5 py-3.5 sm:py-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold text-sm sm:text-base transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap min-h-[52px]"
             >
-              <Mail className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <span>Email: pinnaclecrypt@gmail.com</span>
+              <Mail className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
+              <span>Email Us</span>
+              <span className="hidden xl:inline text-xs font-mono opacity-90 font-normal">(pinnaclecrypt@gmail.com)</span>
             </button>
           </div>
 

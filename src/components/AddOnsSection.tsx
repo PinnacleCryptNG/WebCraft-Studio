@@ -74,28 +74,27 @@ export const AddOnsSection: React.FC<AddOnsSectionProps> = ({
                     : 'bg-white dark:bg-slate-950/60 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900/50 shadow-xs'
                 }`}
               >
-                {/* Popular Tag */}
-                {addon.popular && (
-                  <div className="absolute top-4 right-4">
-                    <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
-                      Popular Add-on
-                    </span>
-                  </div>
-                )}
-
                 <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center">
+                  {/* Top Icon & Popular Badge Row */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center shrink-0">
                       {getIcon(addon.iconName)}
                     </div>
-                    <div>
-                      <h4 className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">
-                        {addon.name}
-                      </h4>
-                      <span className="text-xs font-mono font-bold text-cyan-700 dark:text-cyan-300">
-                        {formattedPrice}
+                    {addon.popular && (
+                      <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 shrink-0">
+                        Popular Add-on
                       </span>
-                    </div>
+                    )}
+                  </div>
+
+                  {/* Title & Price */}
+                  <div className="mb-2.5">
+                    <h4 className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-snug">
+                      {addon.name}
+                    </h4>
+                    <span className="text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400 mt-1 block">
+                      {formattedPrice}
+                    </span>
                   </div>
 
                   <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">

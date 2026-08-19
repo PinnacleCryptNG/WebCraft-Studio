@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CurrencyCode, AgencySettings } from '../types';
 import { 
   Sparkles, 
@@ -13,7 +13,8 @@ import {
   Mail,
   Layers,
   HelpCircle,
-  Package
+  Package,
+  ChevronRight
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -42,371 +43,451 @@ export const Navbar: React.FC<NavbarProps> = ({
   onDirectEmail,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('hero');
+
+  // Track scroll position to set active section
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['hero', 'proof-of-work', 'pricing-plans', 'pay-as-you-build', 'addons', 'faqs'];
+      const scrollPosition = window.scrollY + 120;
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavClick = (sectionId: string) => {
     setIsMobileMenuOpen(false);
     onScrollToSection(sectionId);
   };
 
+  // Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const navItems = [
+    {
+      id: 'proof-of-work',
+      label: 'Proof of Work',
+      subtitle: 'Tailory, Memory, Margin',
+      icon: <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" />,
+      badge: 'Live',
+    },
+    {
+      id: 'pricing-plans',
+      label: 'Pricing Tiers',
+      subtitle: '6 Ready SMB Packages',
+      icon: <Package className="w-3.5 h-3.5 text-cyan-500 shrink-0" />,
+      badge: null,
+    },
+    {
+      id: 'pay-as-you-build',
+      label: 'Pay-As-You-Build',
+      subtitle: 'Stage-by-stage roadmap',
+      icon: <TrendingUp className="w-3.5 h-3.5 text-emerald-500 shrink-0" />,
+      badge: null,
+    },
+    {
+      id: 'addons',
+      label: 'Add-ons',
+      subtitle: 'Hosting & Gateways',
+      icon: <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />,
+      badge: null,
+    },
+    {
+      id: 'faqs',
+      label: 'FAQs',
+      subtitle: 'Timelines & Terms',
+      icon: <HelpCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />,
+      badge: null,
+    },
+  ];
+
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/90 dark:bg-[#080b12]/90 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors shadow-xs">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="h-16 sm:h-18 flex items-center justify-between gap-2">
-          
-          {/* Brand Logo & Title */}
-          <div 
-            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0" 
-            onClick={() => handleNavClick('hero')}
-          >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-md shadow-indigo-500/20 shrink-0">
-              <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+    <>
+      <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/95 dark:bg-[#080b12]/95 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors shadow-xs">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-6">
+          <div className="h-16 sm:h-18 flex items-center justify-between gap-2">
+            
+            {/* Left: Brand Logo & Title */}
+            <div 
+              className="flex items-center gap-2 sm:gap-2.5 cursor-pointer shrink-0 py-1" 
+              onClick={() => handleNavClick('hero')}
+            >
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-md shadow-indigo-500/20 shrink-0">
+                <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-display font-black text-sm sm:text-base lg:text-lg text-slate-900 dark:text-white tracking-tight leading-none whitespace-nowrap">
+                    {agencySettings.agencyName}
+                  </span>
+                  <span className="text-[9px] uppercase font-mono tracking-wider font-bold px-1.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 shrink-0 hidden xs:inline-block">
+                    Rate Card
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 hidden xl:block truncate max-w-[200px] mt-0.5 font-normal">
+                  {agencySettings.tagline}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-display font-black text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-none">
-                  {agencySettings.agencyName}
-                </span>
-                <span className="text-[9px] uppercase font-mono tracking-wider font-bold px-1.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 shrink-0">
-                  Rate Card
-                </span>
+
+            {/* Center: Desktop Navigation Links (Visible on xl screens: >= 1280px) */}
+            <nav className="hidden xl:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-900/70 p-1 rounded-full border border-slate-200/80 dark:border-slate-800/80 text-xs font-semibold text-slate-600 dark:text-slate-300 shrink-0">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                      isActive
+                        ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-cyan-400 shadow-xs font-bold border border-slate-200/80 dark:border-slate-700/80'
+                        : 'hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-800/50'
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Right Controls: Always fits comfortably without overflowing */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              
+              {/* Currency Switcher (3-code pills on md+, cycle button on mobile) */}
+              <div className="hidden sm:flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono shrink-0">
+                {(['NGN', 'USD', 'GBP'] as CurrencyCode[]).map((code) => (
+                  <button
+                    key={code}
+                    onClick={() => onCurrencyChange(code)}
+                    className={`px-1.5 lg:px-2 py-1 rounded-md transition-all font-semibold cursor-pointer whitespace-nowrap ${
+                      activeCurrency === code
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    }`}
+                    title={`Switch currency to ${code}`}
+                  >
+                    {code === 'NGN' ? '₦ NGN' : code === 'USD' ? '$ USD' : '£ GBP'}
+                  </button>
+                ))}
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block truncate max-w-[200px] lg:max-w-xs mt-0.5 font-normal">
-                {agencySettings.tagline}
-              </p>
+
+              {/* Mobile Quick Currency Toggle (< sm) */}
+              <button
+                onClick={() => {
+                  const order: CurrencyCode[] = ['NGN', 'USD', 'GBP'];
+                  const nextIdx = (order.indexOf(activeCurrency) + 1) % order.length;
+                  onCurrencyChange(order[nextIdx]);
+                }}
+                className="sm:hidden px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-[11px] font-mono font-bold shrink-0 cursor-pointer active:scale-95"
+                title="Tap to switch currency"
+              >
+                {activeCurrency === 'NGN' ? '₦ NGN' : activeCurrency === 'USD' ? '$ USD' : '£ GBP'}
+              </button>
+
+              {/* ☀️ / 🌙 THEME TOGGLE BUTTON - High Contrast & Always Visible */}
+              <button
+                onClick={onToggleTheme}
+                className="p-2 sm:px-2.5 sm:py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 transition-all cursor-pointer text-xs font-semibold shrink-0 flex items-center justify-center gap-1.5 shadow-xs active:scale-95"
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label="Toggle theme mode"
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun className="w-4 h-4 text-amber-400 shrink-0 animate-in spin-in-180 duration-300" />
+                    <span className="hidden 2xl:inline text-[11px] font-semibold text-slate-300">Light</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-4 h-4 text-indigo-600 shrink-0 animate-in spin-in-180 duration-300" />
+                    <span className="hidden 2xl:inline text-[11px] font-semibold text-slate-700">Dark</span>
+                  </>
+                )}
+              </button>
+
+              {/* Direct WhatsApp Quick Chat (Desktop & Tablet) */}
+              <button
+                onClick={() => onDirectWhatsApp()}
+                className="hidden md:flex p-2 lg:px-2.5 lg:py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition-colors cursor-pointer items-center gap-1.5 text-xs font-semibold shrink-0 whitespace-nowrap"
+                title="Chat directly on WhatsApp (+2348166818076)"
+              >
+                <MessageSquare className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="hidden 2xl:inline whitespace-nowrap">WhatsApp</span>
+              </button>
+
+              {/* Direct Email CTA (Large Screens) */}
+              <button
+                onClick={onDirectEmail}
+                className="hidden lg:flex p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer items-center justify-center shrink-0"
+                title="Send email to pinnaclecrypt@gmail.com"
+                aria-label="Email Us"
+              >
+                <Mail className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
+              </button>
+
+              {/* Agency Customizer Gear Tool */}
+              <button
+                onClick={onOpenCustomizer}
+                className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+                title="Customize agency branding & settings"
+                aria-label="Agency settings"
+              >
+                <Settings2 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+              </button>
+
+              {/* Custom Quote Primary CTA */}
+              <button
+                onClick={onOpenProposalModal}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-sm shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0 whitespace-nowrap"
+              >
+                <span>Get Quote</span>
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+              </button>
+
+              {/* Hamburger Button (Visible on screens < 1280px / xl) */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="xl:hidden p-2 rounded-lg bg-indigo-600 text-white dark:bg-indigo-600 dark:text-white border border-indigo-500 cursor-pointer shrink-0 active:scale-95 flex items-center justify-center"
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-4 h-4" />
+                ) : (
+                  <Menu className="w-4 h-4" />
+                )}
+              </button>
+
             </div>
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 text-sm font-medium text-slate-600 dark:text-slate-300">
-            <button 
-              onClick={() => handleNavClick('proof-of-work')}
-              className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-white font-semibold transition-colors cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Proof of Work</span>
-            </button>
-            <button 
-              onClick={() => handleNavClick('pricing-plans')}
-              className="hover:text-indigo-600 dark:hover:text-white transition-colors cursor-pointer"
-            >
-              Pricing Tiers
-            </button>
-            <button 
-              onClick={() => handleNavClick('pay-as-you-build')}
-              className="flex items-center gap-1.5 text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 font-semibold transition-colors cursor-pointer bg-cyan-50 dark:bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-200 dark:border-cyan-800/40"
-            >
-              <TrendingUp className="w-3.5 h-3.5" />
-              Pay-As-You-Build
-            </button>
-            <button 
-              onClick={() => handleNavClick('addons')}
-              className="hover:text-indigo-600 dark:hover:text-white transition-colors cursor-pointer"
-            >
-              Add-ons
-            </button>
-            <button 
-              onClick={() => handleNavClick('faqs')}
-              className="hover:text-indigo-600 dark:hover:text-white transition-colors cursor-pointer"
-            >
-              FAQ
-            </button>
-          </nav>
-
-          {/* Right Controls: Desktop */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-2.5">
-            
-            {/* Currency Switcher */}
-            <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono">
-              {(['NGN', 'USD', 'GBP'] as CurrencyCode[]).map((code) => (
-                <button
-                  key={code}
-                  onClick={() => onCurrencyChange(code)}
-                  className={`px-2 py-1 rounded-md transition-all font-semibold cursor-pointer ${
-                    activeCurrency === code
-                      ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-                  }`}
-                  title={`Switch currency to ${code}`}
-                >
-                  {code === 'NGN' ? '₦ NGN' : code === 'USD' ? '$ USD' : '£ GBP'}
-                </button>
-              ))}
-            </div>
-
-            {/* Light / Dark Mode Toggle */}
-            <button
-              onClick={onToggleTheme}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 transition-all cursor-pointer text-xs font-medium"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-indigo-400" />
-                  <span className="hidden xl:inline text-[11px] font-semibold text-slate-300">Dark</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  <span className="hidden xl:inline text-[11px] font-semibold text-slate-700">Light</span>
-                </>
-              )}
-            </button>
-
-            {/* Direct WhatsApp Quick Chat */}
-            <button
-              onClick={() => onDirectWhatsApp()}
-              className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
-              title="Chat directly on WhatsApp (+2348166818076)"
-            >
-              <MessageSquare className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-              <span className="hidden xl:inline">+234 816 681 8076</span>
-            </button>
-
-            {/* Direct Email CTA */}
-            <button
-              onClick={onDirectEmail}
-              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
-              title="Send email to pinnaclecrypt@gmail.com"
-            >
-              <Mail className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <span className="hidden xl:inline">Email Us</span>
-            </button>
-
-            {/* Agency Customizer Tool */}
-            <button
-              onClick={onOpenCustomizer}
-              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer"
-              title="Customize agency branding & settings"
-            >
-              <Settings2 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-            </button>
-
-            {/* Custom Quote CTA */}
-            <button
-              onClick={onOpenProposalModal}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-sm shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
-            >
-              <span>Custom Quote</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
 
           </div>
-
-          {/* Mobile Right Controls: Compact & Responsive */}
-          <div className="flex items-center gap-1.5 md:hidden">
-            
-            {/* Quick Currency Toggle for Mobile */}
-            <button
-              onClick={() => {
-                const order: CurrencyCode[] = ['NGN', 'USD', 'GBP'];
-                const nextIdx = (order.indexOf(activeCurrency) + 1) % order.length;
-                onCurrencyChange(order[nextIdx]);
-              }}
-              className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-[11px] font-mono font-bold"
-              title="Click to cycle currency"
-            >
-              {activeCurrency === 'NGN' ? '₦ NGN' : activeCurrency === 'USD' ? '$ USD' : '£ GBP'}
-            </button>
-
-            {/* Light / Dark Mode Toggle */}
-            <button
-              onClick={onToggleTheme}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-indigo-600" />
-              )}
-            </button>
-
-            {/* Quick WhatsApp icon button on mobile */}
-            <button
-              onClick={() => onDirectWhatsApp()}
-              className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-              title="WhatsApp: +2348166818076"
-            >
-              <MessageSquare className="w-4 h-4" />
-            </button>
-
-            {/* Hamburger Toggle */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 cursor-pointer"
-              aria-label="Open mobile menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </button>
-
-          </div>
-
         </div>
-      </div>
+      </header>
 
-      {/* Mobile Slide-Down Menu Drawer */}
+      {/* Full-Screen Accessible Navigation Drawer (< 1280px) */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-[#0c101d]/98 backdrop-blur-2xl px-4 py-5 shadow-2xl transition-all animate-in slide-in-from-top duration-200">
-          <div className="space-y-4">
+        <div className="fixed inset-0 z-50 xl:hidden animate-in fade-in duration-200">
+          
+          {/* Backdrop overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Drawer Panel */}
+          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-white dark:bg-[#0c101d] border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col justify-between z-10 overflow-y-auto animate-in slide-in-from-right duration-300">
             
-            {/* Quick Currency & Theme Bar in Drawer */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
-              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
-                Mode:
-              </span>
-              <div className="flex items-center gap-2">
+            {/* Top Drawer Header */}
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800/80">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 flex items-center justify-center p-[1px]">
+                    <div className="w-full h-full bg-slate-950 rounded-[9px] flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-cyan-400" />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-display font-black text-sm text-slate-900 dark:text-white">
+                      {agencySettings.agencyName}
+                    </h3>
+                    <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 font-semibold">
+                      Navigation & Quick Tools
+                    </span>
+                  </div>
+                </div>
+
                 <button
-                  onClick={onToggleTheme}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 cursor-pointer"
+                  aria-label="Close menu"
                 >
-                  {theme === 'dark' ? (
-                    <>
-                      <Moon className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>Dark</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sun className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Light</span>
-                    </>
-                  )}
+                  <X className="w-4 h-4" />
                 </button>
-                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono">
+              </div>
+
+              {/* Currency & Theme Selection Grid in Drawer */}
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between gap-2">
+                
+                {/* 3-Currency Selector */}
+                <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono flex-1">
                   {(['NGN', 'USD', 'GBP'] as CurrencyCode[]).map((code) => (
                     <button
                       key={code}
                       onClick={() => onCurrencyChange(code)}
-                      className={`px-2 py-0.5 rounded-md font-semibold transition-all ${
+                      className={`flex-1 py-1.5 rounded-lg font-bold text-center transition-all ${
                         activeCurrency === code
-                          ? 'bg-indigo-600 text-white'
-                          : 'text-slate-600 dark:text-slate-400'
+                          ? 'bg-indigo-600 text-white shadow-xs'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
-                      {code}
+                      {code === 'NGN' ? '₦ NGN' : code === 'USD' ? '$ USD' : '£ GBP'}
                     </button>
                   ))}
                 </div>
+
+                {/* Dark / Light Toggle in Drawer */}
+                <button
+                  onClick={onToggleTheme}
+                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shrink-0 cursor-pointer"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Light Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>Dark Mode</span>
+                    </>
+                  )}
+                </button>
+
               </div>
             </div>
 
-            {/* Nav links */}
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => handleNavClick('proof-of-work')}
-                className="col-span-2 flex items-center justify-between p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-800/80 text-xs font-bold text-left"
-              >
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-400" />
-                  <span>Proof of Work (Tailory, Memory, Margin)</span>
-                </div>
-                <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-indigo-200/60 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">New</span>
-              </button>
+            {/* Navigation Directory Links */}
+            <div className="p-4 space-y-2 flex-1">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2 block mb-2">
+                Page Sections
+              </span>
 
-              <button
-                onClick={() => handleNavClick('pricing-plans')}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/60 dark:border-slate-800 text-xs font-semibold text-left"
-              >
-                <Package className="w-4 h-4 text-indigo-500" />
-                <span>6 Pricing Tiers</span>
-              </button>
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`w-full flex items-center justify-between p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-indigo-50/80 dark:bg-indigo-950/50 border-indigo-300 dark:border-indigo-800 text-slate-900 dark:text-white shadow-xs'
+                        : 'bg-slate-50/60 dark:bg-slate-900/40 border-slate-200/60 dark:border-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        isActive
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-display font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
+                            {item.label}
+                          </span>
+                          {item.badge && (
+                            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/80">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-normal">
+                          {item.subtitle}
+                        </p>
+                      </div>
+                    </div>
 
-              <button
-                onClick={() => handleNavClick('pay-as-you-build')}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/40 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/60 text-xs font-semibold text-left"
-              >
-                <TrendingUp className="w-4 h-4 text-cyan-500" />
-                <span>Pay-As-You-Build</span>
-              </button>
-
-              <button
-                onClick={() => handleNavClick('addons')}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/60 dark:border-slate-800 text-xs font-semibold text-left"
-              >
-                <Layers className="w-4 h-4 text-purple-500" />
-                <span>Add-on Powerups</span>
-              </button>
-
-              <button
-                onClick={() => handleNavClick('faqs')}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/60 dark:border-slate-800 text-xs font-semibold text-left"
-              >
-                <HelpCircle className="w-4 h-4 text-amber-500" />
-                <span>FAQs & Terms</span>
-              </button>
+                    <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Direct Contact CTAs */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            {/* Bottom Drawer Actions & Direct Contacts */}
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2 bg-slate-50/50 dark:bg-slate-950/50">
               
-              {/* WhatsApp CTA */}
+              {/* Direct WhatsApp Callout */}
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   onDirectWhatsApp();
                 }}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-semibold"
+                className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-emerald-500" />
+                  <MessageSquare className="w-4 h-4 shrink-0" />
                   <span>WhatsApp: +234 816 681 8076</span>
                 </div>
-                <span className="text-[10px] uppercase font-mono font-bold bg-emerald-500/20 px-1.5 py-0.5 rounded text-emerald-600 dark:text-emerald-300">
+                <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-700/80 text-emerald-100">
                   Instant
                 </span>
               </button>
 
-              {/* Email CTA */}
+              {/* Direct Email Brief */}
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   onDirectEmail();
                 }}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 text-xs font-semibold"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-cyan-500" />
+                  <Mail className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" />
                   <span>Email: pinnaclecrypt@gmail.com</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
-            </div>
+              {/* Custom Quote & Agency Settings Buttons */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenCustomizer();
+                  }}
+                  className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold cursor-pointer"
+                >
+                  <Settings2 className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Agency Settings</span>
+                </button>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-2 pt-2">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onOpenCustomizer();
-                }}
-                className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-xs font-semibold"
-              >
-                <Settings2 className="w-4 h-4 text-slate-500" />
-                <span>Agency Settings</span>
-              </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenProposalModal();
+                  }}
+                  className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-xs font-bold shadow-sm shadow-indigo-500/20 cursor-pointer"
+                >
+                  <span>Get Quote</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
 
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onOpenProposalModal();
-                }}
-                className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-xs font-bold shadow-md shadow-indigo-500/20"
-              >
-                <span>Custom Quote</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
             </div>
 
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
